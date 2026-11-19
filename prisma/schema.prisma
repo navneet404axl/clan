@@ -1,0 +1,69 @@
+// Phase 1 data model: immutable, timestamped snapshots.
+// History is append-only — we never update or delete; trends are computed from the series.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// Snapshot of the clan's top-level stats at a point in time.
+model ClanSnapshot {
+  id           String   @id @default(cuid())
+  clanTag      String
+  capturedAt   DateTime @default(now())
+  name         String
+  clanLevel    Int
+  memberCount  Int
+  clanPoints   Int
+  warWins      Int
+  warWinStreak Int
+  payload      Json // full clan response, for anything we didn't extract
+  createdAt    DateTime @default(now())
+
+  @@index([clanTag, capturedAt])
+}
+
+/// Snapshot of the clan's current war (or notInWar / private).
+model WarSnapshot {
+  id              String    @id @default(cuid())
+  clanTag         String
+  capturedAt      DateTime  @default(now())
+  state           String // notInWar | preparation | inWar | warEnded | private
+  warKey          String? // stable id for one war (preparationStartTime) — groups a war's snapshots
+  teamSize        Int?
+  opponentTag     String?
+  opponentName    String?
+  clanStars       Int?
+  opponentStars   Int?
+  clanDestruction Float?
+  clanAttacks     Int?
+  endTime         DateTime?
+  payload         Json?
+  createdAt       DateTime  @default(now())
+
+  @@index([clanTag, capturedAt])
+  @@index([clanTag, warKey])
+}
+
+/// One row per member per capture — the basis for donation/trophy/participation trends.
+model MemberSnapshot {
+  id                String   @id @default(cuid())
+  clanTag           String
+  capturedAt        DateTime @default(now())
+  playerTag         String
+  name              String
+  role              String
+  expLevel          Int
+  trophies          Int
+  donations         Int
+  donationsReceived Int
+  clanRank          Int
+  createdAt         DateTime @default(now())
+
+  @@index([clanTag, capturedAt])
+  @@index([playerTag, capturedAt])
+}
