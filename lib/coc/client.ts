@@ -1,5 +1,5 @@
 import { normalizeTag } from "../env";
-import type { CocClan, CocMember, CocCurrentWar } from "./types";
+import type { CocClan, CocMember, CocCurrentWar, CocPlayer } from "./types";
 
 /** Error carrying the HTTP status and the API's `reason` string. */
 export class CocApiError extends Error {
@@ -69,6 +69,8 @@ export function createCocClient(opts: CocClientOptions = {}) {
         throw e;
       }
     },
+
+    getPlayer: (tag: string) => get<CocPlayer>(`/players/${encodeTag(tag)}`),
   };
 }
 

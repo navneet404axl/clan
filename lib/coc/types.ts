@@ -45,3 +45,13 @@ export interface CocCurrentWar {
   clan?: CocWarClan;
   opponent?: CocWarClan;
 }
+
+export interface CocPlayer {
+  tag: string;
+  name: string;
+  townHallLevel: number;
+  trophies: number;
+  expLevel: number;
+  role?: string;
+  clan?: { tag: string; name: string };
+}

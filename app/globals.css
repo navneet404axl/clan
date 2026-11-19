@@ -1,26 +1,79 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #0a0a0f;
+  --surface: #14141c;
+  --surface-2: #1d1d28;
+  --border: #2a2a38;
+  --foreground: #ece8e1;
+  --muted: #8f897b;
+  --gold: #f4b324;
+  --gold-soft: #ffd766;
+  --win: #4ade80;
+  --loss: #f87171;
+  --font-display: "Lilita One", system-ui, sans-serif;
 }
 
 @theme inline {
   --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-border: var(--border);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --color-muted: var(--muted);
+  --color-gold: var(--gold);
+  --color-gold-soft: var(--gold-soft);
+  --color-win: var(--win);
+  --color-loss: var(--loss);
+  --font-display: var(--font-display);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica, Arial,
+    sans-serif;
+}
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+/* war-room backdrop: gold glow + faint grid */
+.bg-warroom {
+  background:
+    radial-gradient(1200px 600px at 50% -10%, rgba(244, 179, 36, 0.1), transparent 60%),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255, 255, 255, 0.025) 40px),
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(255, 255, 255, 0.025) 40px),
+    var(--background);
+}
+
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes spin-slow {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-float-slow {
+  animation: float-slow 6s ease-in-out infinite;
+}
+.animate-spin-slow {
+  animation: spin-slow 24s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float-slow,
+  .animate-spin-slow {
+    animation: none;
+  }
 }
